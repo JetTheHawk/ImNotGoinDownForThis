@@ -97,7 +97,6 @@ GameObject:
   - component: {fileID: 5776223781145402101}
   - component: {fileID: 8878730317059395959}
   - component: {fileID: 1604735182285559914}
-  - component: {fileID: 2734446886544757652}
   m_Layer: 0
   m_Name: Rifle
   m_TagString: Untagged
@@ -176,28 +175,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2734446886544757652
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4333513996429470118}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43016381297202334, guid: 5e660baa071a59244a526787f74ef594, type: 2}
 --- !u!1 &8112868580178314384
 GameObject:
   m_ObjectHideFlags: 0

@@ -62,3 +62,13 @@ MonoBehaviour:
   - {fileID: 4300002, guid: ffdfcb810f2918b4f8fe9f917f07bc78, type: 3}
   - {fileID: 4300046, guid: ffdfcb810f2918b4f8fe9f917f07bc78, type: 3}
   - {fileID: 4300048, guid: ffdfcb810f2918b4f8fe9f917f07bc78, type: 3}
+  WeaponDatas:
+  - {fileID: 11400000, guid: 89d36ca1c764b204b89f07bd729f62ba, type: 2}
+  - {fileID: 11400000, guid: 9bea382d865a51d4cafb68a10a673458, type: 2}
+  - {fileID: 11400000, guid: 52b839a545b67f842b1976d3bfc82b5d, type: 2}
+  BulletDatas:
+  - {fileID: 11400000, guid: 25fcd712629052c448507e746504accd, type: 2}
+  - {fileID: 11400000, guid: 845994057acecf84ba92d4fecdb7bca5, type: 2}
+  - {fileID: 11400000, guid: fab3dd04717c9724caf9d55ea36a9ec7, type: 2}
+  BaseHealth: 100
+  MoveSpeed: 3.5
