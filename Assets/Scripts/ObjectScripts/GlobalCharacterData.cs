@@ -11,4 +11,5 @@ public class GlobalCharacterData : ScriptableObject
 
     public float BaseHealth = 100f;
     public float MoveSpeed = 3.5f;
+    public float CharacterSightRange = 100f;
 }

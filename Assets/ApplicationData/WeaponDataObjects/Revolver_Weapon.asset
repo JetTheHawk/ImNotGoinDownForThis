@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Revolver_Weapon
   m_EditorClassIdentifier: 
   WeaponName: Revolver
-  AttackSpeed: 1
-  Range: 20
+  AttackSpeed: 0.01
+  Range: 5
   BulletType: {fileID: 11400000, guid: 25fcd712629052c448507e746504accd, type: 2}
   WeaponMeshPrefab: {fileID: 2471130486569084593, guid: 15c44b617143b2d4c9faba82c4dd1999, type: 3}
   WeaponPositionOffset: {x: 0, y: 0.021, z: -0.075}

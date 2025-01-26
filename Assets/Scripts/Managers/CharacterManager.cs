@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +10,6 @@ public class CharacterManager : MonoBehaviour
 
     [SerializeField]
     private GameObject characterPrefab;
-
-
 
     //Spawned and Living characters
     public List<Character> ActiveCharacters = new List<Character>();
@@ -26,32 +25,9 @@ public class CharacterManager : MonoBehaviour
     [SerializeField]
     private float spawnRadius = 10f;
 
-
-
-    //DATA
+    public Action CharacterSpawningFinished;
 
     public GlobalCharacterData GlobalData;
-
-
-
-
-
-    // Random options
-    // names
-    // Meshes
-    // weapon
-    // 
-
-    /// <summary>
-    /// Begin spawning on match start, add slight delay between spawns to smooth loading
-    /// clear character list just incase 
-    /// loop through the number of characters
-    /// each should get
-    /// random spawn position on the navmesh
-    /// random name
-    /// random weapon
-    /// 
-    /// </summary>
 
     private void Awake()
     {
@@ -75,10 +51,6 @@ public class CharacterManager : MonoBehaviour
         GameManager.Instance.OnMatchStart += MatchStarted;
     }
 
-    private void Start()
-    {
-        MatchStarted();
-    }
     void MatchStarted()
     {
         StartCoroutine(SpawnCharacters());
@@ -86,28 +58,10 @@ public class CharacterManager : MonoBehaviour
 
     private IEnumerator SpawnCharacters()
     {
-        //clear active characters if coming from restart
-
-
-        /// <summary>
-        /// for number of characters
-        /// 
-        /// determin random spawn position
-        /// 
-        /// instantite character prefab
-        /// 
-        /// assign random data to character
-        /// 
-        /// Name,Mesh,Weapon
-        /// 
-        /// Add to activeCharacters
-        /// </summary>
-        /// 
-
         for (int i = 0; i < NumberOfCharacters; i++)
         {
             // Determine a random spawn position
-            Vector2 circle2D = Random.insideUnitCircle * spawnRadius;
+            Vector2 circle2D = UnityEngine.Random.insideUnitCircle * spawnRadius;
             
             Vector3 spawnPos = new Vector3(
                 circle2D.x + SpawnOrigin.position.x,
@@ -118,6 +72,9 @@ public class CharacterManager : MonoBehaviour
             // Instantiate the character prefab
             GameObject charGO = Instantiate(characterPrefab, spawnPos, Quaternion.identity);
             Character characterScript = charGO.GetComponent<Character>();
+
+            //set base values
+            characterScript.CurrentHealth = GlobalData.BaseHealth;
 
             // Assign random data
             if (characterScript != null)
@@ -145,16 +102,30 @@ public class CharacterManager : MonoBehaviour
             }
             yield return new WaitForSeconds(DelayBetweenSpawns);
         }
+
+        CharacterSpawningFinished?.Invoke();
+    }
+
+    public void UnregisterCharacter(Character character)
+    {
+        ActiveCharacters.Remove(character);
+
+        if (ActiveCharacters.Count == 1)
+        {
+            Character winningCharacter = ActiveCharacters[0];
+            winningCharacter.SetState(winningCharacter.ActiveCharacterAIStates.Victory);
+        }
     }
 
     private string GetRandomName()
     {
+        //TODO PREVENT GRABBING THE SAME NAME TWICE
         if (GlobalData.PossibleNames == null || GlobalData.PossibleNames.Count == 0)
         {
             Debug.LogWarning("Global possible names list is null. default to chr plus random number");
-            return "Char_" + Random.Range(1000, 9999);
+            return "Char_" + UnityEngine.Random.Range(1000, 9999);
         }
-        return GlobalData.PossibleNames[Random.Range(0, GlobalData.PossibleNames.Count)];
+        return GlobalData.PossibleNames[UnityEngine.Random.Range(0, GlobalData.PossibleNames.Count)];
     }
 
     private Mesh GetRandomCharacterMesh()
@@ -164,7 +135,7 @@ public class CharacterManager : MonoBehaviour
             Debug.LogWarning("Global charactermeshses data is null. defaulting to base mesh");
             return null;
         }
-        return GlobalData.CharacterMeshes[Random.Range(0, GlobalData.CharacterMeshes.Count)];
+        return GlobalData.CharacterMeshes[UnityEngine.Random.Range(0, GlobalData.CharacterMeshes.Count)];
     }
 
     private WeaponData GetRandomWeaponData()
@@ -174,17 +145,7 @@ public class CharacterManager : MonoBehaviour
             Debug.LogWarning("Global WeaponDatas is null. defaulting to base weapon");
             return null;
         }
-        return GlobalData.WeaponDatas[Random.Range(0, GlobalData.WeaponDatas.Count)];
-    }
-
-    private BulletData GetRandomBulletData()
-    {
-        if (GlobalData.BulletDatas == null || GlobalData.BulletDatas.Count == 0)
-        {
-            Debug.LogWarning("Global BulletDatas is null. defaulting to base weapon");
-            return null;
-        }
-        return GlobalData.BulletDatas[Random.Range(0, GlobalData.BulletDatas.Count)];
+        return GlobalData.WeaponDatas[UnityEngine.Random.Range(0, GlobalData.WeaponDatas.Count)];
     }
 
     private void OnDrawGizmos()

@@ -1,6 +1,7 @@
 using System;
-using UnityEditor.ShaderGraph.Internal;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Character : MonoBehaviour
 {
@@ -12,11 +13,84 @@ public class Character : MonoBehaviour
 
     public WeaponData CurrentWeaponData;
     public GameObject CurrentWeaponInstance;
+    public CharacterWeapon CurrentCharacterWeapon;
     
 
     public Transform WeaponAnchor;
 
     public Action OnCharacterDeath;
+
+
+    [Header("AI")]
+    public Character CurrentTarget;
+    public CharacterStates ActiveCharacterAIStates;
+    public NavMeshAgent Agent;
+    public CharacterBaseState CurrentState;
+    [SerializeField] private string debugCurrentStateName;
+
+
+    public float aiUpdatesPerSecond = 5f; 
+
+    private Coroutine aiLoopCoroutine;
+
+
+    private void Awake()
+    {
+        ActiveCharacterAIStates = new CharacterStates(this);
+
+        SetState(ActiveCharacterAIStates.Searching);
+    }
+
+    private void OnEnable()
+    {
+        CharacterManager.Instance.CharacterSpawningFinished += StartCharacterLogic;
+    }
+
+    private void OnDisable()
+    {
+        // Stop the AI loop
+        if (aiLoopCoroutine != null)
+        {
+            StopCoroutine(aiLoopCoroutine);
+        }
+
+        CharacterManager.Instance.CharacterSpawningFinished -= StartCharacterLogic;
+    }
+
+    private void StartCharacterLogic()
+    {
+        aiLoopCoroutine = StartCoroutine(AILoop());
+    }
+
+    private IEnumerator AILoop()
+    {
+        while (true)
+        {
+            if (CurrentState != null)
+            {
+                CurrentState.OnUpdate();
+            }
+
+            float waitTime = 1f / aiUpdatesPerSecond;
+            yield return new WaitForSeconds(waitTime);
+        }
+    }
+
+    public void SetState(CharacterBaseState newState)
+    {
+        if (CurrentState != null)
+        {
+            CurrentState.OnExit();
+        }
+            
+        CurrentState = newState;
+        debugCurrentStateName = CurrentState.GetType().Name;
+
+        if (CurrentState != null)
+        {
+            CurrentState.OnEnter();
+        }  
+    }
 
     public void SetCharacterMesh(Mesh newMesh)
     {
@@ -56,7 +130,7 @@ public class Character : MonoBehaviour
 
         if (CurrentWeaponData == null)
         {
-            Debug.Log("Weapon unequipped.");
+            Debug.Log("Current Weapon data is null.");
             return;
         }
 
@@ -70,6 +144,8 @@ public class Character : MonoBehaviour
                 WeaponAnchor
             );
 
+            CurrentCharacterWeapon = CurrentWeaponInstance.GetComponent<CharacterWeapon>();
+
             // Apply offset
             CurrentWeaponInstance.transform.localPosition = CurrentWeaponData.WeaponPositionOffset;
             CurrentWeaponInstance.transform.localRotation = CurrentWeaponData.WeaponRotationOffset;
@@ -81,12 +157,13 @@ public class Character : MonoBehaviour
     }
 
 
-    public void ChangeHealth (float healthChange)
+    public void TakeDamage(float damage)
     {
-        CurrentHealth += healthChange;
-        if (CurrentHealth < CharacterManager.Instance.GlobalData.BaseHealth)
+        CurrentHealth -= damage;
+
+        if (CurrentHealth <= 0)
         {
-            OnCharacterDeath?.Invoke();
+            SetState(ActiveCharacterAIStates.Death);
         }
     }
 

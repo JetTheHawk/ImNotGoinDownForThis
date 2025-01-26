@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletName: ShotgunShell
   BulletDamage: 10
-  BulletSpeed: 0.5
+  BulletSpeed: 5
   BulletLifeTime: 5
   BulletPrefab: {fileID: 2083600404363932464, guid: 775d4a58eeea84d4dbe8cfdbd0380d6d, type: 3}
