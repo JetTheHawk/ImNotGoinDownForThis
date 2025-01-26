@@ -57,6 +57,16 @@ public class AttackingState : CharacterBaseState
             return;
         }
 
+        if (character.CurrentCharacterWeapon == null)
+        {
+            Debug.LogError($"{character.DisplayName} ERROR: No CharacterWeapon assigned! Cannot fire.");
+            return;
+        }
+
+        //send bullet
+        character.CurrentCharacterWeapon.FireWeapon(character.CurrentTarget);
+
+        //deal damage
         float damage = character.CurrentWeaponData?.BulletType?.BulletDamage ?? 10f;
         Debug.Log($"{character.DisplayName} is ATTACKING {character.CurrentTarget.DisplayName} | Damage: {damage}");
 

@@ -48,13 +48,9 @@ public class CharacterManager : MonoBehaviour
     }
     private void OnEnable()
     {
-        //GameManager.Instance.OnMatchStart += MatchStarted;
+        GameManager.Instance.OnMatchStart += MatchStarted;
     }
 
-    private void Start()
-    {
-        MatchStarted();
-    }
     void MatchStarted()
     {
         StartCoroutine(SpawnCharacters());

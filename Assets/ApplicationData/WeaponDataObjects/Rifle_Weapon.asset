@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Rifle_Weapon
   m_EditorClassIdentifier: 
   WeaponName: Rifle
-  AttackSpeed: 0.01
-  Range: 5
+  AttackSpeed: 0.015
+  Range: 10
   BulletType: {fileID: 11400000, guid: 845994057acecf84ba92d4fecdb7bca5, type: 2}
   WeaponMeshPrefab: {fileID: 4333513996429470118, guid: 0923b125d7c936b498f003ca2cdca0b0, type: 3}
   WeaponPositionOffset: {x: 0, y: 0.021, z: -0.075}

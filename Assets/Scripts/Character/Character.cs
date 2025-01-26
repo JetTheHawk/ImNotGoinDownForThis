@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Rendering;
 
 public class Character : MonoBehaviour
 {
@@ -15,6 +13,7 @@ public class Character : MonoBehaviour
 
     public WeaponData CurrentWeaponData;
     public GameObject CurrentWeaponInstance;
+    public CharacterWeapon CurrentCharacterWeapon;
     
 
     public Transform WeaponAnchor;
@@ -28,6 +27,7 @@ public class Character : MonoBehaviour
     public NavMeshAgent Agent;
     public CharacterBaseState CurrentState;
     [SerializeField] private string debugCurrentStateName;
+
 
     public float aiUpdatesPerSecond = 5f; 
 
@@ -79,13 +79,17 @@ public class Character : MonoBehaviour
     public void SetState(CharacterBaseState newState)
     {
         if (CurrentState != null)
+        {
             CurrentState.OnExit();
-
+        }
+            
         CurrentState = newState;
         debugCurrentStateName = CurrentState.GetType().Name;
 
         if (CurrentState != null)
+        {
             CurrentState.OnEnter();
+        }  
     }
 
     public void SetCharacterMesh(Mesh newMesh)
@@ -126,7 +130,7 @@ public class Character : MonoBehaviour
 
         if (CurrentWeaponData == null)
         {
-            Debug.Log("Weapon unequipped.");
+            Debug.Log("Current Weapon data is null.");
             return;
         }
 
@@ -139,6 +143,8 @@ public class Character : MonoBehaviour
                 WeaponAnchor.rotation,
                 WeaponAnchor
             );
+
+            CurrentCharacterWeapon = CurrentWeaponInstance.GetComponent<CharacterWeapon>();
 
             // Apply offset
             CurrentWeaponInstance.transform.localPosition = CurrentWeaponData.WeaponPositionOffset;
@@ -153,15 +159,10 @@ public class Character : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        Debug.Log($"{DisplayName} is taking {damage} damage! Current Health Before: {CurrentHealth}");
-
         CurrentHealth -= damage;
-
-        Debug.Log($"{DisplayName} New Health: {CurrentHealth}");
 
         if (CurrentHealth <= 0)
         {
-            Debug.Log($"{DisplayName} has died!");
             SetState(ActiveCharacterAIStates.Death);
         }
     }

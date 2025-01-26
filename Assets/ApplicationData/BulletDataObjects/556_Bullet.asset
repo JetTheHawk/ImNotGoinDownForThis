@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletName: 556_Bullet
   BulletDamage: 7
-  BulletSpeed: 2
+  BulletSpeed: 9
   BulletLifeTime: 5
   BulletPrefab: {fileID: 1445024871637492, guid: c2e9d756844b57d479cf3635b1a10f48, type: 3}

@@ -10,7 +10,7 @@ public class VictoryState : CharacterBaseState
 
         //play vicory anim
 
-        // tell game/ui manager UI for winner
+        UIManager.Instance.ShowVictoryScreen(character.DisplayName, character.CurrentWeaponData.WeaponName);
 
     }
 }

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BulletName: 9MM
   BulletDamage: 5
-  BulletSpeed: 1
+  BulletSpeed: 7
   BulletLifeTime: 5
   BulletPrefab: {fileID: 1129187789409760, guid: cdb76abba9a97994d8ea506743231c10, type: 3}
