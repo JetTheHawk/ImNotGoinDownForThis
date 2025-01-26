@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Shotgun_Weapon
   m_EditorClassIdentifier: 
   WeaponName: Shotgun
-  AttackSpeed: 2
-  Range: 15
+  AttackSpeed: 0.01
+  Range: 3
   BulletType: {fileID: 11400000, guid: fab3dd04717c9724caf9d55ea36a9ec7, type: 2}
   WeaponMeshPrefab: {fileID: 8531314967689281438, guid: 9459ad377bc7d294bb7aa0b969645b0b, type: 3}
   WeaponPositionOffset: {x: 0, y: 0.021, z: -0.075}

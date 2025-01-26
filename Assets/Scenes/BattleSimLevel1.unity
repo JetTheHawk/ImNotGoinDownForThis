@@ -769,7 +769,7 @@ MonoBehaviour:
   SpawnOrigin: {fileID: 119075166}
   DelayBetweenSpawns: 0.3
   groundHeight: 0
-  spawnRadius: 10
+  spawnRadius: 12.46
   GlobalData: {fileID: 11400000, guid: 46627d9b3bfcd2f48a7a0c6cca803699, type: 2}
 --- !u!1 &830827319
 GameObject:

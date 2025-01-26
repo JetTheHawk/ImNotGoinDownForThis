@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.Rendering;
 
 public class Character : MonoBehaviour
 {
@@ -17,6 +20,73 @@ public class Character : MonoBehaviour
     public Transform WeaponAnchor;
 
     public Action OnCharacterDeath;
+
+
+    [Header("AI")]
+    public Character CurrentTarget;
+    public CharacterStates ActiveCharacterAIStates;
+    public NavMeshAgent Agent;
+    public CharacterBaseState CurrentState;
+    [SerializeField] private string debugCurrentStateName;
+
+    public float aiUpdatesPerSecond = 5f; 
+
+    private Coroutine aiLoopCoroutine;
+
+
+    private void Awake()
+    {
+        ActiveCharacterAIStates = new CharacterStates(this);
+
+        SetState(ActiveCharacterAIStates.Searching);
+    }
+
+    private void OnEnable()
+    {
+        CharacterManager.Instance.CharacterSpawningFinished += StartCharacterLogic;
+    }
+
+    private void OnDisable()
+    {
+        // Stop the AI loop
+        if (aiLoopCoroutine != null)
+        {
+            StopCoroutine(aiLoopCoroutine);
+        }
+
+        CharacterManager.Instance.CharacterSpawningFinished -= StartCharacterLogic;
+    }
+
+    private void StartCharacterLogic()
+    {
+        aiLoopCoroutine = StartCoroutine(AILoop());
+    }
+
+    private IEnumerator AILoop()
+    {
+        while (true)
+        {
+            if (CurrentState != null)
+            {
+                CurrentState.OnUpdate();
+            }
+
+            float waitTime = 1f / aiUpdatesPerSecond;
+            yield return new WaitForSeconds(waitTime);
+        }
+    }
+
+    public void SetState(CharacterBaseState newState)
+    {
+        if (CurrentState != null)
+            CurrentState.OnExit();
+
+        CurrentState = newState;
+        debugCurrentStateName = CurrentState.GetType().Name;
+
+        if (CurrentState != null)
+            CurrentState.OnEnter();
+    }
 
     public void SetCharacterMesh(Mesh newMesh)
     {
@@ -81,12 +151,18 @@ public class Character : MonoBehaviour
     }
 
 
-    public void ChangeHealth (float healthChange)
+    public void TakeDamage(float damage)
     {
-        CurrentHealth += healthChange;
-        if (CurrentHealth < CharacterManager.Instance.GlobalData.BaseHealth)
+        Debug.Log($"{DisplayName} is taking {damage} damage! Current Health Before: {CurrentHealth}");
+
+        CurrentHealth -= damage;
+
+        Debug.Log($"{DisplayName} New Health: {CurrentHealth}");
+
+        if (CurrentHealth <= 0)
         {
-            OnCharacterDeath?.Invoke();
+            Debug.Log($"{DisplayName} has died!");
+            SetState(ActiveCharacterAIStates.Death);
         }
     }
 

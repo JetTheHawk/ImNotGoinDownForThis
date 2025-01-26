@@ -1,16 +1,17 @@
-using UnityEngine;
-
-public class CharacterStates : MonoBehaviour
+public class CharacterStates
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public SearchingState Searching;
+    public ChasingState Chasing;
+    public AttackingState Attacking;
+    public DeathState Death;
+    public VictoryState Victory;
 
-    // Update is called once per frame
-    void Update()
+    public CharacterStates(Character character)
     {
-        
+        Searching = new SearchingState(character);
+        Chasing = new ChasingState(character);
+        Attacking = new AttackingState(character);
+        Death = new DeathState(character);
+        Victory = new VictoryState(character);
     }
 }

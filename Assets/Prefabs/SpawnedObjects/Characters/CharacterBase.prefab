@@ -49,11 +49,13 @@ MonoBehaviour:
   CurrentHealth: 0
   MoveSpeed: 0
   DisplayName: 
-  CurrentCharacterType: 0
   CharacterMesh: {fileID: 1725064623868275744}
   CurrentWeaponData: {fileID: 11400000, guid: 89d36ca1c764b204b89f07bd729f62ba, type: 2}
   CurrentWeaponInstance: {fileID: 0}
   WeaponAnchor: {fileID: 6125887601868033608}
+  CurrentTarget: {fileID: 0}
+  Agent: {fileID: 6691883714344905793}
+  aiUpdatesPerSecond: 5
 --- !u!195 &6691883714344905793
 NavMeshAgent:
   m_ObjectHideFlags: 0
